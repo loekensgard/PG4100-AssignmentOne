@@ -10,7 +10,7 @@ public class Leiebil {
     private boolean leid;
 
     //Konstruktør
-    public Leiebil(String regNummer, boolean leid) {
+    public Leiebil(String regNummer) {
         setRegNummer(regNummer);
         setLeid(leid);
     }

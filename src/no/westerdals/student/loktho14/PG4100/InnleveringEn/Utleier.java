@@ -24,6 +24,13 @@ public class Utleier {
         LEIEBILER.addAll(LAG_LEIEBIL.lagLeieBiler());
     }
 
+    public Utleier(String regnummer) {
+        LAG_LEIEBIL = null;
+        Leiebil leiebil = new Leiebil(regnummer);
+        LEIEBILER.add(leiebil);
+
+    }
+
     //Returnerer en instace av Utleier, slik at jeg bruker samme utleier overalt og ikke lager nye.
     public static Utleier getUtleier() {
         if (utleier == null) {
@@ -48,24 +55,30 @@ public class Utleier {
         LOCK.lock();
         try {
             while (ingenLedigeBiler()) {
-                System.out.println(kunde.getKundeNavn() + " fikk ikke leid bil");
+                fikkIkkeleid(kunde);
                 leiebilStatus();
                 ingenLedig.await();
             }
 
-            for (Leiebil leiebil : LEIEBILER) {
-                if (!leiebil.getleid()) {
-                    leiebil.lei(kunde);
-                    System.out.println(kunde + " har leid bilen med regNr " + leiebil.getRegNummer());
-                    break;
-                }
-            }
+            leiLedigLeiebil(kunde);
             leiebilStatus();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             LOCK.unlock();
         }
+    }
+
+
+    private Leiebil leiLedigLeiebil(Kunde kunde) {
+        for (Leiebil leiebil : LEIEBILER) {
+            if (!leiebil.getleid()) {
+                leiebil.lei(kunde);
+                fikkLeid(kunde, leiebil);
+                return leiebil;
+            }
+        }
+        return null;
     }
 
     //Metode som sjekker om alle leiebilene mine er leid ut eller ikke
@@ -90,7 +103,7 @@ public class Utleier {
                 if (leiebil.getLeieKunde() == kunde) {
                     leiebil.leverLeiebil();
                     ingenLedig.signal();
-                    System.out.println(kunde + " leverte tilbake bilen med regNr " + leiebil.getRegNummer());
+                    leverteTilbake(kunde, leiebil);
                 }
             }
             leiebilStatus();
@@ -109,5 +122,16 @@ public class Utleier {
         System.out.println(MIN_STJERNER + " Status slutt " + MAKS_STJERNER + LINJE_SKIFT);
     }
 
+    private void fikkLeid(Kunde kunde, Leiebil leiebil) {
+        System.out.println(kunde + " har leid bilen med regNr " + leiebil.getRegNummer());
+    }
+
+    private void fikkIkkeleid(Kunde kunde) {
+        System.out.println(kunde.getKundeNavn() + " fikk ikke leid bil");
+    }
+
+    private void leverteTilbake(Kunde kunde, Leiebil leiebil) {
+        System.out.println(kunde + " leverte tilbake bilen med regNr " + leiebil.getRegNummer());
+    }
 
 }

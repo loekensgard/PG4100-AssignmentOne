@@ -1,5 +1,7 @@
 package no.westerdals.student.loktho14.PG4100.InnleveringEn;
 
+import java.util.Scanner;
+
 /**
  * Created by Thorstein on 18.01.2016.
  */
@@ -8,12 +10,19 @@ public class Kunde implements Runnable {
     private final int MAKS_SEKUNDER_UT = 2000;
     private final int MAKS_SEKUNDER_INN = 6000;
     private final int MIN_SEKUNDER = 1000;
+    private static final Scanner SCANNER = new Scanner(System.in);
     private String kundeNavn;
-    private boolean startRun = true;
+    private boolean startRun;
 
     //Konstruktør
     public Kunde(String kundeNavn) {
         setKundeNavn(kundeNavn);
+        this.startRun = true;
+    }
+
+    //Konstruktør dersom jeg vil teste Scanner.
+    public Kunde() {
+        this(SCANNER.next());
     }
 
     //Getter metode for å få navnet til kunde
@@ -26,14 +35,10 @@ public class Kunde implements Runnable {
         this.kundeNavn = kundeNavn;
     }
 
-    public void setTestBruk(Boolean n) {
-        this.startRun = n;
+    public void stoppRun() {
+        startRun = false;
     }
 
-    //Metode for stoppe run metoden
-    public void stoppRun() {
-        setTestBruk(false);
-    }
 
     //toString metode for å skrive ut navnet til kunden
     @Override
@@ -64,9 +69,19 @@ public class Kunde implements Runnable {
     @Override
     public void run() {
         while (startRun) {
-            leiThread();
+            try {
+                Thread.sleep(leiTid());
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             UTLEIER.leiLeiebil(this);
-            leverThread();
+
+            try {
+                Thread.sleep(leverTid());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             UTLEIER.leverTilbakeLeiebil(this);
         }
     }
@@ -74,20 +89,12 @@ public class Kunde implements Runnable {
     /*
     * Metode for å få en tråd til å sove
     * */
-    public void leiThread() {
-        try {
-            Thread.sleep((int) (Math.random() * MAKS_SEKUNDER_UT) + MIN_SEKUNDER);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private int leiTid() {
+        return ((int) (Math.random() * MAKS_SEKUNDER_UT) + MIN_SEKUNDER);
     }
 
-    public void leverThread() {
-        try {
-            Thread.sleep((int) (Math.random() * MAKS_SEKUNDER_INN) + MIN_SEKUNDER);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private int leverTid() {
+        return ((int) (Math.random() * MAKS_SEKUNDER_INN) + MIN_SEKUNDER);
     }
     /*
     * Metode for å få en tråd til å sove - slutt

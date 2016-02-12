@@ -24,7 +24,7 @@ public class LagLeiebil {
     * */
     public Leiebil lagLeiebilRegNummer() {
         String regNummer = lagRegNummer();
-        return new Leiebil(regNummer, NY_BIL);
+        return new Leiebil(regNummer);
     }
 
     /*
