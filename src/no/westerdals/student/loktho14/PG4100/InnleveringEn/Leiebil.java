@@ -6,7 +6,7 @@ package no.westerdals.student.loktho14.PG4100.InnleveringEn;
 public class Leiebil {
     private final String BINDESTREK = " - ";
     private String regNummer;
-    private Kunde leiKunde = null;
+    private Kunde leieKunde = null;
     private boolean leid;
 
     //Konstruktør
@@ -21,7 +21,7 @@ public class Leiebil {
     }
 
     public Kunde getLeieKunde() {
-        return leiKunde;
+        return leieKunde;
     }
 
     public boolean getleid() {
@@ -34,8 +34,8 @@ public class Leiebil {
         this.regNummer = regNummer;
     }
 
-    public void setLeieKunde(Kunde leiKunde) {
-        this.leiKunde = leiKunde;
+    public void setLeieKunde(Kunde leieKunde) {
+        this.leieKunde = leieKunde;
     }
 
     public void setLeid(Boolean leid) {
@@ -60,7 +60,7 @@ public class Leiebil {
     }
 
     //Metode for å leie en leiebil
-    public void lei(Kunde kunde) {
+    public void leiLeiebil(Kunde kunde) {
         setLeieKunde(kunde);
         setLeid(true);
     }

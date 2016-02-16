@@ -18,7 +18,7 @@ public class Utleier {
     private Condition ingenLedig = LOCK.newCondition();
     private static Utleier utleier = null;
 
-    //konstruktør som lager fem leiebiler ved hjelp av lagLeiebil klasse
+    //konstruktør som lager fem leiebiler ved hjelp av lagLeiebil klassen
     public Utleier() {
         LAG_LEIEBIL = new LagLeiebil(5);
         LEIEBILER.addAll(LAG_LEIEBIL.lagLeieBiler());
@@ -73,7 +73,7 @@ public class Utleier {
     private Leiebil leiLedigLeiebil(Kunde kunde) {
         for (Leiebil leiebil : LEIEBILER) {
             if (!leiebil.getleid()) {
-                leiebil.lei(kunde);
+                leiebil.leiLeiebil(kunde);
                 fikkLeid(kunde, leiebil);
                 return leiebil;
             }
