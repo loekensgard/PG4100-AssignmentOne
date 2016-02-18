@@ -68,7 +68,7 @@ public class Kunde implements Runnable {
     * */
     @Override
     public void run() {
-        while (startRun) {
+        while (true) {
             try {
                 Thread.sleep(leiTid());
 
@@ -83,6 +83,9 @@ public class Kunde implements Runnable {
                 e.printStackTrace();
             }
             UTLEIER.leverTilbakeLeiebil(this);
+            if (!startRun) {
+                break;
+            }
         }
     }
 
